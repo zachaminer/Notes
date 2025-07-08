@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Notes - Notes App</title>
-  <style>body {
-      font-size: 1.15rem;
+  <style>
+    body {
+      font-size: 1.05rem;
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background-color: #fafafa;
@@ -13,38 +14,43 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
+      overflow: hidden;
     }
     .menu-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem 1rem;
-      background-color: #ffffff;
-      border-bottom: 1px solid #e6e6e6;
-      position: relative;
+      padding: 0.5rem 0.75rem;
+      background-color: #fafafa;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 1000;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s ease;
+    }
+    .menu-bar.scrolled {
+      border-bottom: 1px solid #ddd;
     }
     .menu-icon,
-.menu-dots,
-.sidebar-toggle {
-  background: none;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
-    
-    }
-    .app-container {
+    .menu-dots,
+    .sidebar-toggle {
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
       display: flex;
-      flex: 1;
-      overflow: hidden;
-      position: relative;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+    .menu-icon:hover,
+    .menu-dots:hover,
+    .sidebar-toggle:hover {
+      background-color: #f0f0f0;
     }
     .sidebar {
       width: 260px;
@@ -70,12 +76,6 @@
       padding: 0.75rem 1rem;
       border-bottom: 1px solid #e6e6e6;
     }
-    .sidebar h3 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #888;
-      margin: 1rem 0 1rem 0.25rem;
-    }
     .sidebar ul {
       list-style: none;
       padding-left: 0;
@@ -97,203 +97,147 @@
     }
     main {
       flex: 1;
-      padding: 2rem;
+      padding: 1.25rem;
       overflow-y: auto;
       background-color: #fafafa;
+      margin-top: 3.5rem;
     }
-    .dropdown-menu {
-      position: absolute;
-      top: 3.5rem;
-      right: 1rem;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      display: none;
-      min-width: 140px;
-      z-index: 1000;
+    .note-list > div {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e6e6e6;
     }
-    .dropdown-menu.show {
-      display: block;
+    .note-list h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
     }
-    .dropdown-menu div {
-      padding: 0.65rem 1rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      color: #333;
+    .note-list p {
+      margin: 0;
+      color: #555;
     }
-    .dropdown-menu div:hover {
-      background-color: #f7f7f7;
-    }
-    
-
-  .menu-icon:hover,
-.menu-dots:hover,
-.sidebar-toggle:hover {
-  background-color: #f0f0f0 !important;
-}
-    
-  }
-  
-  }
-  $11.8rem$2 font-weight: bold;
-    font-weight: bold;
-  }
-  .menu-title {
-    font-size: 2.175rem;
-    font-weight: bold;
-  }
-</style>
+  </style>
 </head>
 <body>
-  <div class="menu-bar">
-    <button class="menu-icon" onclick="toggleSidebar()" aria-label="Toggle sidebar">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="9" y1="3" x2="9" y2="21"></line>
-      </svg>
-    </button>
-    <div class="menu-title" id="pageTitle">All Notes</div>
-    <button class="menu-dots" onclick="toggleDropdown()" aria-label="More options">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="5" r="1"></circle>
-        <circle cx="12" cy="12" r="1"></circle>
-        <circle cx="12" cy="19" r="1"></circle>
-      </svg>
-    </button>
-    <div class="dropdown-menu" id="dropdownMenu">
-      <div onclick="alert('Add note coming soon!')">＋ Add Note</div>
-      <div>Settings</div>
-      <div>Help</div>
-      <div>Log out</div>
-    </div>
-  </div>
-
-  <div class="app-container">
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <span style="display: flex; align-items: center; gap: 0.5rem;">
-          <img src="https://www.gravatar.com/avatar/?d=mp" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%;">
-          <span style="font-weight: bold; font-size: 1rem;">Zach</span>
-        </span>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <button class="menu-icon" aria-label="Settings">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 9 3.6V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-          </button>
-          <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Close sidebar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="9" y1="3" x2="9" y2="21"></line>
-            </svg>
-          </button>
-          </div>
+<div class="menu-bar" id="menuBar">
+  <button class="menu-icon" onclick="toggleSidebar()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="9" y1="3" x2="9" y2="21"></line>
+    </svg>
+  </button>
+  <div id="pageTitle" class="menu-title" style="opacity: 0; transition: opacity 0.2s ease; font-weight: bold; font-size: 1.75rem;">All Notes</div>
+  <button class="menu-dots">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="5" r="1" />
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="12" cy="19" r="1" />
+    </svg>
+  </button>
 </div>
-<ul>
-  <li><a href="#" onclick="navigateTo('All Notes')">📝 All Notes</a></li>
-        <li><a href="#" onclick="navigateTo('Starred')">⭐ Starred</a></li>
-        <li style="margin-top: 1rem; font-size: 1.4rem; font-weight: bold; color: #888; display: flex; justify-content: space-between; align-items: center;">
-          <span style="display: block; padding: 0.5rem 0.75rem;">FOLDERS</span>
-          <button onclick="addFolder()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #666;">＋</button>
-        </li>
-        <li><a href="#" onclick="navigateTo('Unsorted')">📂 Unsorted</a></li>
-      </ul>
-      <ul style="margin-top: auto;">
-        <li><a href="#" onclick="navigateTo('Trash')">🗑️ Trash</a></li>
-      </ul>
-    </div>
 
-    <main>
-      <h2>All Notes</h2>
-      <button onclick="addNote()" style="margin-bottom: 1rem; padding: 0.5rem 1rem; font-size: 1rem; background-color: #ededed; border: none; border-radius: 6px; cursor: pointer;">＋ Add Note</button>
-      <p>This folder is currently empty.</p>
-    </main>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span style="display: flex; align-items: center; gap: 0.5rem;">
+      <img src="https://www.gravatar.com/avatar/?d=mp" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%;">
+      <span style="font-weight: bold; font-size: 1rem;">Zach</span>
+    </span>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <button class="menu-icon" aria-label="Settings">
+        <!-- Settings Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 9 3.6V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Close sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="3" x2="9" y2="21"></line>
+        </svg>
+      </button>
+    </div>
   </div>
+  <ul>
+    <li><a href="#" onclick="navigateTo('All Notes')">📝 All Notes</a></li>
+    <li><a href="#" onclick="navigateTo('Starred')">⭐ Starred</a></li>
+    <li style="margin-top: 1rem; font-size: 1.4rem; font-weight: bold; color: #888; display: flex; justify-content: space-between; align-items: center;">
+      <span style="display: block; padding: 0.5rem 0.75rem;">FOLDERS</span>
+      <button onclick="addFolder()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #666;">＋</button>
+    </li>
+    <li><a href="#" onclick="navigateTo('Unsorted')">📂 Unsorted</a></li>
+  </ul>
+  <ul style="margin-top: auto;">
+    <li><a href="#" onclick="navigateTo('Trash')">🗑️ Trash</a></li>
+  </ul>
+</div>
 
-  <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById("sidebar");
-      sidebar.classList.toggle("open");
-    }
+<main id="mainContent">
+  <h2>All Notes</h2>
+  <button onclick="addNote()" style="margin-bottom: 1rem; background: none; border: none; color: #007bff; cursor: pointer; font-size: 1rem;">＋ Add Note</button>
+  <div class="note-list" id="noteList"></div>
+</main>
+<script>
+  const notes = {
+    "All Notes": [
+      { title: "Project Meeting Notes", content: "Discuss deliverables and deadlines for Q3 goals." },
+      { title: "Grocery List", content: "Eggs, Milk, Bread, Spinach, Chicken, Almonds" },
+      { title: "Workout Plan", content: "Monday: Upper body, Wednesday: Cardio, Friday: Legs" },
+      { title: "Books to Read", content: "Clean Architecture, Hooked, The Lean Startup, Thinking in Bets" },
+      { title: "Meeting with Sarah", content: "Discuss new onboarding process and next week’s goals." },
+      { title: "Dream Destinations", content: "Japan, New Zealand, Italy, Peru, Morocco" },
+      { title: "Birthday Gift Ideas", content: "Wireless earbuds, custom mug, hiking gear, recipe book" },
+      { title: "Side Project Notes", content: "Explore API integration, draft UI sketches, review feature list" },
+      { title: "Weekly Reflection", content: "Wins: Finished the mockup. Focus for next week: bug testing." },
+      { title: "Travel Plans", content: "Look into flights and accommodations for September trip to Spain." }
+    ],
+    "Starred": [],
+    "Unsorted": [],
+    "Trash": []
+  };
 
-    function toggleDropdown() {
-      const menu = document.getElementById("dropdownMenu");
-      menu.classList.toggle("show");
-    }
-
-    window.addEventListener('click', function(e) {
-      const sidebar = document.getElementById("sidebar");
-      const button = document.querySelector('.menu-icon');
-      const dots = document.querySelector('.menu-dots');
-      const menu = document.getElementById("dropdownMenu");
-
-      if (!button.contains(e.target) && !sidebar.contains(e.target) && window.innerWidth < 768) {
-        sidebar.classList.remove("open");
-      }
-
-      if (!dots.contains(e.target) && !menu.contains(e.target)) {
-        menu.classList.remove("show");
-      }
+  function renderNotes(folder) {
+    const container = document.getElementById("noteList");
+    container.innerHTML = "";
+    const folderNotes = notes[folder] || [];
+    folderNotes.forEach(note => {
+      const div = document.createElement("div");
+      div.innerHTML = `<h3>${note.title}</h3><p>${note.content}</p>`;
+      container.appendChild(div);
     });
+  }
 
-    function navigateTo(folderName) {
-      const main = document.querySelector("main");
-      main.innerHTML = `<h2>${folderName}</h2><p>This folder is currently empty.</p>`;
-      document.getElementById('pageTitle').textContent = folderName;
+  function navigateTo(folderName) {
+    document.getElementById('mainContent').scrollTop = 0;
+    document.querySelector("main h2").textContent = folderName;
+    document.getElementById('pageTitle').textContent = folderName;
+    renderNotes(folderName);
+    toggleSidebar();
+  }
 
-      const sidebar = document.getElementById("sidebar");
-      if (window.innerWidth < 768) {
-        sidebar.classList.remove("open");
-      }
+  function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("open");
+  }
+
+  function addNote() {
+    alert("This would open a new note editor.");
+  }
+
+  const pageTitle = document.getElementById('pageTitle');
+  const main = document.getElementById('mainContent');
+  const menuBar = document.getElementById('menuBar');
+
+  main.addEventListener('scroll', () => {
+    if (main.scrollTop > 10) {
+      pageTitle.style.opacity = 1;
+      menuBar.classList.add('scrolled');
+    } else {
+      pageTitle.style.opacity = 0;
+      menuBar.classList.remove('scrolled');
     }
+  });
 
-    function addFolder() {
-      const icon = prompt("Choose an icon for your folder (e.g. 📁, 🧾, 📓):");
-      if (!icon) return;
-
-      const folderName = prompt("Enter a name for the new folder:");
-      if (!folderName) return;
-
-      const newItem = document.createElement("li");
-      const newLink = document.createElement("a");
-      newLink.href = "#";
-      newLink.textContent = `${icon} ${folderName}`;
-      newLink.onclick = function () {
-        navigateTo(folderName);
-        return false;
-      };
-      newItem.appendChild(newLink);
-
-      const sidebarLists = document.querySelectorAll(".sidebar ul");
-      const mainList = sidebarLists[0];
-      const unsortedItem = mainList.querySelector("a[href='#'][onclick*='Unsorted']")?.parentNode;
-
-      if (unsortedItem) {
-        mainList.insertBefore(newItem, unsortedItem.nextSibling);
-      } else {
-        mainList.appendChild(newItem);
-      }
-    }
-  
-    function addNote() {
-  const main = document.querySelector("main");
-  main.innerHTML = `
-    <h2>New Note</h2>
-    <textarea style="width: 100%; height: 60vh; padding: 1rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px; resize: vertical;">Start typing your note here...</textarea>
-    <div style="margin-top: 1rem;">
-      <button onclick="saveNote()" style="padding: 0.5rem 1.25rem; font-size: 1rem; background-color: #007aff; color: white; border: none; border-radius: 6px; cursor: pointer;">Save</button>
-    </div>
-  `;
-  document.getElementById('pageTitle').textContent = "New Note";
-}
-
-function saveNote() {
-  const textarea = document.querySelector("textarea");
-  const noteText = textarea.value;
-  alert("Note saved: " + noteText);
-}
-  </script>
+  // Initial render
+  renderNotes("All Notes");
+</script>
 </body>
 </html>
